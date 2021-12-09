@@ -19,72 +19,44 @@ def baseSearchFunction(finished: Event, exit: Event, data):
   # set up video capture and stop sign data
   vidCapture = cv2.VideoCapture(0)
   stop_data = cv2.CascadeClassifier(data)
-  ultrasonic = Ultrasonic()
 
   try:
-    collisionThread = CollisionThread(ultrasonic, finished, exit)
+    collisionThread = CollisionThread(finished, exit)
     collisionThread.start()
     # main loop to search, move, and detect
+    debug("Looking for object...")
     while (not exit.is_set() and not finished.is_set()):
-      debug("Looking for object...")
       if detectStopSign(vidCapture, stop_data):
         debug("Objective Found!")
         finished.set()
-        collisionThread.join()
+        # collisionThread.join()
 
   except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
     debug("SIGINT caught!")
 
   finally: 
     vidCapture.release()
-    Motor.PWM.setMotorModel(0,0,0,0)
-    ultrasonic.pwm_S.setServoPwm('0',90)
   
 
 def baseConvergeFunction():
   return None
 
 class CollisionThread(Thread):
-  def __init__(self, ultrasonic: Ultrasonic, finished: Event, exit: Event):
+  def __init__(self, finished: Event, exit: Event):
       super().__init__()
       self.f = finished
       self.e = exit
-      self.ultrasonic = ultrasonic
 
-      self.PWM=Motor()
-      self.pwm_S=Servo()
+      self.motor=Motor()
+      self.servo=Servo()
+      self.ultrasonic = Ultrasonic()
 
   def run(self):
+    self.servo.setServoPwm('0', 90)
+    self.servo.setServoPwm('1', 90)
 
-    for i in range(30,151,60):
-      self.pwm_S.setServoPwm('0',90)
-      time.sleep(0.2)
-      if i==30:
-        L = self.ultrasonic.get_distance()
-      elif i==90:
-        M = self.ultrasonic.get_distance()
-      else:
-        R = self.ultrasonic.get_distance()
+    self.motor.setMotorModel(200, 200)
 
-    while (not self.f.is_set() and not self.e.is_set()):
-      for i in range(90,30,-60):
-          # self.pwm_S.setServoPwm('0',i)
-          time.sleep(0.2)
-          if i==30:
-              L = self.ultrasonic.get_distance()
-          elif i==90:
-              M = self.ultrasonic.get_distance()
-          else:
-              R = self.ultrasonic.get_distance()
-          self.ultrasonic.run_motor(L,M,R)
-      for i in range(30,151,60):
-          # self.pwm_S.setServoPwm('0',i)
-          time.sleep(0.2)
-          if i==30:
-              L = self.ultrasonic.get_distance()
-          elif i==90:
-              M = self.ultrasonic.get_distance()
-          else:
-              R = self.ultrasonic.get_distance()
-          self.ultrasonic.run_motor(L,M,R)
-
+    self.f.wait()
+    self.motor.setMotorModel(0,0,0,0)
+    
