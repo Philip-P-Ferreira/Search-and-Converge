@@ -26,6 +26,7 @@ def baseSearchFunction(finished: Event, exit: Event, data):
     collisionThread.start()
     # main loop to search, move, and detect
     while (not exit.is_set() and not finished.is_set()):
+      debug("Looking for object...")
       if detectStopSign(vidCapture, stop_data):
         debug("Objective Found!")
         finished.set()
