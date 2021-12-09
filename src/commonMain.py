@@ -63,15 +63,15 @@ class CollisionThread(Thread):
       # self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
 
       self.servo.setServoPwm('0', 30)
-      time.sleep(1)
+      time.sleep(0.2)
       dist1 = self.ultrasonic.get_distance()
 
       self.servo.setServoPwm('0', 90)
-      time.sleep(1)
+      time.sleep(0.2)
       dist2 = self.ultrasonic.get_distance()
       
       self.servo.setServoPwm('0', 150)
-      time.sleep(1)
+      time.sleep(0.2)
       dist3 = self.ultrasonic.get_distance()
 
       if (dist1 < COLLISION_DIST or dist2 < COLLISION_DIST or dist3 < COLLISION_DIST):
