@@ -4,11 +4,10 @@ import cv2
 # toggle debug from here
 DEBUG_FLAG.set()
 
-# create data for object (stop sign)
-stop_data = cv2.CascadeClassifier('assets/stop_data.xml')
 
 def searchFunction(finished: Event, exit: Event):
   vidCapture = cv2.VideoCapture(0)
+  stop_data = cv2.CascadeClassifier('assets/stop_data.xml')
   while (not exit.is_set()):
     suc, img=vidCapture.read()
 
@@ -27,5 +26,5 @@ def convergeFunction():
 
 masterController = Master(searchFunction, convergeFunction)
 
-masterController.startSearch(stop_data)
+masterController.startSearch("Some data")
 masterController.converge()
