@@ -1,11 +1,12 @@
-from masterMain import convergeFunction
 from modules.Slave import *
 import cv2
+
+DEBUG_FLAG.set()
 
 def searchFunction(finished: Event, exit: Event, data):
 
   vidCapture = cv2.VideoCapture(0)
-  stop_data = cv2.CascadeClassifier('stop_data.xml')
+  stop_data = cv2.CascadeClassifier('../assets/stop_data.xml')
   while (not exit.is_set()):
     suc, img=vidCapture.read()
 
@@ -17,11 +18,12 @@ def searchFunction(finished: Event, exit: Event, data):
         debug("Objective Found!")
         finished.set()
         vidCapture.release()
+        break
 
 def converge():
   return None
 
-followerController = Slave("Philips-MacBook-Pro.local", searchFunction, convergeFunction)
+followerController = Slave("Philips-MacBook-Pro.local", searchFunction, converge())
 
 followerController.startSearch()
 followerController.converge()
