@@ -55,7 +55,7 @@ class CollisionThread(Thread):
     self.servo.setServoPwm('0', 90)
     self.servo.setServoPwm('1', 90)
 
-    self.motor.setMotorModel(200, 200)
+    self.motor.setMotorModel(200, 200, 200, 200)
 
     self.f.wait()
     self.motor.setMotorModel(0,0,0,0)
