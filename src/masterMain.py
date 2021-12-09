@@ -1,4 +1,4 @@
-from common import baseConvergeFunction, baseSearchFunction
+from commonMain import baseConvergeFunction, baseSearchFunction
 from modules.Master import * 
 
 CASCADE_FILE = "assets/stop_data.xml"

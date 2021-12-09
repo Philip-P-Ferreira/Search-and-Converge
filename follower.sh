@@ -1,4 +1,3 @@
 #!/bin/bash
 
-./install_deps.sh
-sudo python followerMain.py
+sudo python src/followerMain.py

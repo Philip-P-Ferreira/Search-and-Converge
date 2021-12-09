@@ -1,6 +1,5 @@
-from common import baseConvergeFunction, baseSearchFunction
+from commonMain import baseConvergeFunction, baseSearchFunction
 from modules.Slave import *
-import cv2
 
 DEBUG_FLAG.set()
 
