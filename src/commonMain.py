@@ -6,6 +6,8 @@ from modules.Motor import Motor
 from modules.Ultrasonic import Ultrasonic
 from modules.servo import Servo
 
+MOTOR_SPEED = 1000
+
 def detectStopSign(vidCapture, stop_data):
   suc, img=vidCapture.read()
 
@@ -54,9 +56,18 @@ class CollisionThread(Thread):
   def run(self):
     self.servo.setServoPwm('0', 90)
     self.servo.setServoPwm('1', 90)
+    
 
-    self.motor.setMotorModel(500, 500, 500, 500)
+    while (not self.f.is_set() and not self.e.is_set()):
+      self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
 
-    self.f.wait()
+      if (self.ultrasonic.get_distance() > 10):
+        self.motor.setMotorModel(-MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED)
+        time.sleep(0.2)
+
+        self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED)
+        time.sleep(0.2)
+
+
     self.motor.setMotorModel(0,0,0,0)
     
