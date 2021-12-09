@@ -83,4 +83,5 @@ class CollisionThread(Thread):
 
 
     self.motor.setMotorModel(0,0,0,0)
+    self.servo.setServoPwm('0', 90)
     
