@@ -70,7 +70,7 @@ class CollisionThread(Thread):
       time.sleep(0.1)
       dist2 = self.ultrasonic.get_distance()
       
-      self.servo.setServoPwm('0', -90)
+      self.servo.setServoPwm('0', 180)
       time.sleep(0.1)
       dist3 = self.ultrasonic.get_distance()
 
