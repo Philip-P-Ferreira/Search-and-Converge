@@ -1,6 +1,5 @@
-from common import baseConvergeFunction, baseSearchFunction, detectStopSign
+from common import baseConvergeFunction, baseSearchFunction
 from modules.Master import * 
-import cv2
 
 CASCADE_FILE = "assets/stop_data.xml"
 
