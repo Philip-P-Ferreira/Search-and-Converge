@@ -75,7 +75,7 @@ class CollisionThread(Thread):
               M = self.ultrasonic.get_distance()
           else:
               R = self.ultrasonic.get_distance()
-          self.run_motor(L,M,R)
+          self.ultrasonic.run_motor(L,M,R)
       for i in range(30,151,60):
           # self.pwm_S.setServoPwm('0',i)
           time.sleep(0.2)
@@ -85,5 +85,5 @@ class CollisionThread(Thread):
               M = self.ultrasonic.get_distance()
           else:
               R = self.ultrasonic.get_distance()
-          self.run_motor(L,M,R)
+          self.ultrasonic.run_motor(L,M,R)
 
