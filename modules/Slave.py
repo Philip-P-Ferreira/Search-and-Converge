@@ -1,6 +1,6 @@
 import zmq
 from typing import Callable
-from Common import *
+from modules.Common import *
 from time import sleep
 
 class Slave:

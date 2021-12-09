@@ -1,6 +1,6 @@
 import zmq
 from typing import Callable
-from Common import *
+from modules.Common import *
 
 class Master:
   def __init__(self, searchFunc: MasterAction, convergeFunc: Callable[[], None]):
