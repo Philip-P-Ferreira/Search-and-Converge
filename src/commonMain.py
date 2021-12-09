@@ -61,7 +61,7 @@ class CollisionThread(Thread):
     while (not self.f.is_set() and not self.e.is_set()):
       self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
 
-      if (self.ultrasonic.get_distance() > 10):
+      if (self.ultrasonic.get_distance() > 30):
         self.motor.setMotorModel(-MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED)
         time.sleep(0.2)
 
