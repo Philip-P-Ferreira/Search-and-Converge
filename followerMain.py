@@ -4,6 +4,7 @@ import cv2
 
 def searchFunction(finished: Event, exit: Event, data):
 
+  vidCapture = cv2.VideoCapture(0)
   stop_data = cv2.CascadeClassifier('stop_data.xml')
   while (not exit.is_set()):
     suc, img=vidCapture.read()
@@ -15,11 +16,12 @@ def searchFunction(finished: Event, exit: Event, data):
     if amount_found != 0:
         debug("Objective Found!")
         finished.set()
+        vidCapture.release()
 
 def converge():
   return None
 
-followerController = Slave("phil-pi.local", searchFunction, convergeFunction)
+followerController = Slave("Philips-MacBook-Pro.local", searchFunction, convergeFunction)
 
 followerController.startSearch()
 followerController.converge()
