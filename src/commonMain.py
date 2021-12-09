@@ -1,8 +1,10 @@
+import time
 import cv2
-from threading import Event
+from threading import Event, Thread
 from modules.Common import debug
 from modules.Motor import Motor
 from modules.Ultrasonic import Ultrasonic
+from modules.servo import Servo
 
 def detectStopSign(vidCapture, stop_data):
   suc, img=vidCapture.read()
@@ -38,3 +40,48 @@ def baseSearchFunction(finished: Event, exit: Event, data):
 
 def baseConvergeFunction():
   return None
+
+class collisionThread(Thread):
+  def __init__(self, ultrasonic: Ultrasonic, finished: Event, exit: Event):
+      super().__init__()
+      self.f = finished
+      self.e = exit
+      self.ultrasonic = ultrasonic
+
+      self.PWM=Motor()
+      self.pwm_S=Servo()
+
+  def run(self):
+
+    for i in range(30,151,60):
+      self.pwm_S.setServoPwm('0',i)
+      time.sleep(0.2)
+      if i==30:
+        L = self.ultrasonic.get_distance()
+      elif i==90:
+        M = self.ultrasonic.get_distance()
+      else:
+        R = self.ultrasonic.get_distance()
+
+    while (not self.f.is_set() and not self.e.is_set()):
+      for i in range(90,30,-60):
+          self.pwm_S.setServoPwm('0',i)
+          time.sleep(0.2)
+          if i==30:
+              L = self.ultrasonic.get_distance()
+          elif i==90:
+              M = self.ultrasonic.get_distance()
+          else:
+              R = self.ultrasonic.get_distance()
+          self.run_motor(L,M,R)
+      for i in range(30,151,60):
+          self.pwm_S.setServoPwm('0',i)
+          time.sleep(0.2)
+          if i==30:
+              L = self.ultrasonic.get_distance()
+          elif i==90:
+              M = self.ultrasonic.get_distance()
+          else:
+              R = self.ultrasonic.get_distance()
+          self.run_motor(L,M,R)
+
