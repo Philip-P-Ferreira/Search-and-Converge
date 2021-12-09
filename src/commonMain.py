@@ -63,13 +63,13 @@ class CollisionThread(Thread):
       self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
 
       self.servo.setServoPwm('0', 30)
-      self.avoid(Ultrasonic.get_distance())
+      self.avoid(self, Ultrasonic.get_distance())
 
       self.servo.setServoPwm('0', 90)
-      self.avoid(Ultrasonic.get_distance())
+      self.avoid(self, Ultrasonic.get_distance())
       
       self.servo.setServoPwm('0', 150)
-      self.avoid(Ultrasonic.get_distance())
+      self.avoid(self, Ultrasonic.get_distance())
 
     self.motor.setMotorModel(0,0,0,0)
     self.servo.setServoPwm('0', 90)
