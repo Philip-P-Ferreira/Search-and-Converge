@@ -22,12 +22,14 @@ def baseSearchFunction(finished: Event, exit: Event, data):
   ultrasonic = Ultrasonic()
 
   try:
-    ultrasonic.run()
+    collisionThread = CollisionThread(ultrasonic, finished, exit)
+    collisionThread.start()
     # main loop to search, move, and detect
     while (not exit.is_set() and not finished.is_set()):
       if detectStopSign(vidCapture, stop_data):
         debug("Objective Found!")
         finished.set()
+        collisionThread.join()
 
   except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
     debug("SIGINT caught!")
@@ -41,7 +43,7 @@ def baseSearchFunction(finished: Event, exit: Event, data):
 def baseConvergeFunction():
   return None
 
-class collisionThread(Thread):
+class CollisionThread(Thread):
   def __init__(self, ultrasonic: Ultrasonic, finished: Event, exit: Event):
       super().__init__()
       self.f = finished
