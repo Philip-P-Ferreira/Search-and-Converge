@@ -6,7 +6,7 @@ DEBUG_FLAG.set()
 def searchFunction(finished: Event, exit: Event, data):
 
   vidCapture = cv2.VideoCapture(0)
-  stop_data = cv2.CascadeClassifier('../assets/stop_data.xml')
+  stop_data = cv2.CascadeClassifier('assets/stop_data.xml')
   while (not exit.is_set()):
     suc, img=vidCapture.read()
 
