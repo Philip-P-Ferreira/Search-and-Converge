@@ -23,7 +23,7 @@ def searchFunction(finished: Event, exit: Event, data):
 def converge():
   return None
 
-followerController = Slave("Philips-MacBook-Pro.local", searchFunction, converge())
+followerController = Slave("Philips-MacBook-Pro.local", searchFunction, converge)
 
 followerController.startSearch()
 followerController.converge()
