@@ -62,7 +62,7 @@ class CollisionThread(Thread):
     while (not self.f.is_set() and not self.e.is_set()):
       # self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
 
-      self.servo.setServoPwm('0', 60)
+      self.servo.setServoPwm('0', 30)
       time.sleep(1)
       dist1 = self.ultrasonic.get_distance()
 
@@ -70,7 +70,7 @@ class CollisionThread(Thread):
       time.sleep(1)
       dist2 = self.ultrasonic.get_distance()
       
-      self.servo.setServoPwm('0', 120)
+      self.servo.setServoPwm('0', 150)
       time.sleep(1)
       dist3 = self.ultrasonic.get_distance()
 
