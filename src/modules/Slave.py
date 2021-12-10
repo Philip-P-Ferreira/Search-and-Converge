@@ -73,11 +73,11 @@ class Slave:
       arr = msg.split(":")
       self.foundCarNum = int(arr[1])
 
-  def converge(self, foundCarNum: int):
+  def converge(self):
     '''
     converge()
   
     Simply runs the converge function
     '''
-    self.convergeFunc(foundCarNum)
+    self.convergeFunc(self.foundCarNum)
     
