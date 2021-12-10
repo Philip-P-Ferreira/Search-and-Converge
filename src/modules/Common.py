@@ -9,6 +9,11 @@ COLLECTOR_PORT = 5556
 ADDR_FORMAT = "tcp://%s:%d"
 FOUND_MSG = "OBJECTIVE_FOUND"
 
+# event flag plus simple function for toggling debug messages
+DEBUG_FLAG = Event()
+def debug(msg: str):
+  if DEBUG_FLAG.is_set(): print(msg)
+
 # custom function types for actions
 MasterAction = Callable[[Event, Event], None]
 '''
@@ -24,7 +29,7 @@ The action MUST be stoppable via another thread setting this flag
 
 SlaveAction = Callable[[Event, Event, str], None]
 '''
-SlaveAction: (finished: Event, exit: Event, data: any) -> None
+SlaveAction: (finished: Event, exit: Event, data: str) -> None
 Custom function type to represent a local task being run on a slave car.
 
 finished: Event
@@ -34,14 +39,8 @@ exit: Event
 The action MUST be stoppable via another thread setting this flag
 
 data: any
-data to pass into function
+String representing path to cascade file to find objective
 '''
-
-# event flag plus simple function for toggling debug messages
-DEBUG_FLAG = Event()
-def debug(msg: str):
-  if DEBUG_FLAG.is_set(): print(msg)
-
 class ThreadedTask(Thread):
   '''
   Threaded Task
@@ -87,6 +86,9 @@ class NetworkThread(ThreadedTask):
     '''
     Constructor()
 
+    mailbox: Queue
+    Queue (preferably of size 1) to put network message into
+
     finished: Event
     Event flag for another thread to know that this task has completed
     
@@ -102,7 +104,8 @@ class NetworkThread(ThreadedTask):
     run()
 
     Overridden run function for thread. Polls the socket every 1 second. Allows for termination via
-    EXIT_FLAG. Sets the finished flag if a message has been received
+    EXIT_FLAG. Sets the finished flag if a message has been received. If a message is received, it is
+    placed into the mailbox
     '''
 
     # poll every second for new message
@@ -129,7 +132,8 @@ class ActionThread(ThreadedTask):
     Event flag for another thread to know that this task has completed
     
     action: Action
-    An action to be run in a separate thread. Flags in action must be interacted with'''
+    An action to be run in a separate thread. Flags in action must be interacted with
+    '''
     super().__init__(finished)
     self.action = action
     self.data = data

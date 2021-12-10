@@ -7,9 +7,13 @@ class Master:
     '''
     Create a Master control object
 
-    searchFunc: ((Event, Event) -> None) -> None
-      a search function that is performed while the master is in "search mode". The first event flag must be set when
-      the function succeeds. The second event flag must be able to stop the function in a reasonable amount of time
+    searchFunc: (Event, Event) -> None) -> None
+    a search function that is performed while the master is in "search mode". The first event flag must be set when
+    he function succeeds. The second event flag must be able to stop the function in a reasonable amount of time
+
+    convergeFunc: (int) -> None
+    Function that is run when the cars are converge. The int is the carnumber that found the objective and is passed
+    into the function
     '''
     self.carNumber = carNumber
     self.searchFunc = searchFunc
@@ -26,12 +30,12 @@ class Master:
     #debug message
     debug("Bound to ports %d and %d" % (DISTRIBUTOR_PORT, COLLECTOR_PORT))
 
-  def startSearch(self, data):
+  def startSearch(self, data: str):
     '''
     Send image data to slave cars and start search
 
-    data: Any
-      Data to be sent to slave cars to find the objective
+    data: str
+    String representing path to cascade file to find the objective
     '''
 
     # send data
@@ -61,7 +65,7 @@ class Master:
     for t in threads:
       t.join()
 
-    # no message means we found the objective
+    # no message means we found the objective. Set foundCarNum to appropriate number
     if (mailbox.empty()):
       self.foundCarNum = self.carNumber
     else:
@@ -78,6 +82,6 @@ class Master:
   def converge(self):
     '''
     converge()
-    Simply runs the converge function
+    Simply runs the converge function. Calls the convergeFunc and passes in the found car number
     '''
     self.convergeFunc(self.foundCarNum)

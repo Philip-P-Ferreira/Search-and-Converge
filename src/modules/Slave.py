@@ -8,10 +8,14 @@ class Slave:
     '''
     Create a Slave control object
 
-    searchFunc: ((Event, Event, any) -> None) -> None
+    searchFunc: ((Event, Event, str) -> None) -> None
       a search function that is performed while the slave is in "search mode". The first event flag must be set when the 
-      function succeeds. The second event flag must be able to stop the function in a reasonable amount of time. The any object
-      is the data necessary for the slaves to find the objective
+      function succeeds. The second event flag must be able to stop the function in a reasonable amount of time. The string is the
+      path to the cascade file needed to find the objective
+
+    convergeFunc: (int) -> None
+    Function that is run when the cars are converge. The int is the carnumber that found the objective and is passed
+    into the function
     '''
     self.carNumber = carNumber
     self.ipAddr = ipAddr
@@ -34,10 +38,7 @@ class Slave:
 
   def startSearch(self):
     '''
-    Send image data to slave cars and start search
-
-    data: Any
-      Data to be sent to slave cars to find the objective
+    Start search in Slave car
     '''
 
     # receive data
