@@ -100,7 +100,7 @@ class CollisionThread(Thread):
     self.servo.setServoPwm('1', 90)
     
     # loop while neither flag has been set
-    while (self.checkEndCondition()):
+    while (not self.checkEndCondition()):
       self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
       angleList = [30, 90, 150, 90]
       
@@ -138,5 +138,5 @@ class CollisionThread(Thread):
     checkEndCondition()
     Simple function that checks both of the flags that should stop the thread
     '''
-    return not self.f.is_set() and not self.e.is_set()
+    return self.f.is_set() or self.e.is_set()
     
