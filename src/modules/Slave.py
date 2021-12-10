@@ -42,7 +42,7 @@ class Slave:
 
     # receive data
     data = self.distributor.recv_string()
-    debug("Received data from master and starting search")
+    debug("Received %s from master and starting search" % data)
 
     # we have to know *who* found the item
     finished = Event()
