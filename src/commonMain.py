@@ -35,7 +35,7 @@ def baseSearchFunction(finished: Event, exit: Event, data):
         finished.set()
         # collisionThread.join()
 
-  except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
+  except KeyboardInterrupt:
     debug("SIGINT caught!")
 
   finally: 
@@ -43,13 +43,18 @@ def baseSearchFunction(finished: Event, exit: Event, data):
   
 
 def baseConvergeFunction(carNum: int):
+  
+  # setup pins for buzzer
   GPIO.setwarnings(False)
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(17, GPIO.OUT)
 
+  # Higher number = faster beeps
   period = (1/2)/carNum
 
+  # repeat beeping some number of times
   for i in range(5):
+    # toggle button n times fast, followed by a longer pause
     for i in range(carNum):
       GPIO.output(17, True)
       time.sleep(period)
@@ -57,51 +62,79 @@ def baseConvergeFunction(carNum: int):
       time.sleep(period)
     time.sleep(1)
 
+  # always make sure to stop it
   GPIO.output(17, False)
-
-
 class CollisionThread(Thread):
+  '''
+  CollisionThread:
+  Extended Thread to run collision detection task. Must be stoppable via an exit and finished flag
+  '''
   def __init__(self, finished: Event, exit: Event):
-      super().__init__()
-      self.f = finished
-      self.e = exit
+    '''
+    Constructor()
+    
+    finished: Event
+    Event flag. If set, the task must exit
 
-      self.motor=Motor()
-      self.servo=Servo()
-      self.ultrasonic = Ultrasonic()
+    exit: Event
+    Event flag. If set, the task must exit
+    '''
+    super().__init__()
+    self.f = finished
+    self.e = exit
+
+    # define objects to control car hardware
+    self.motor=Motor()
+    self.servo=Servo()
+    self.ultrasonic = Ultrasonic()
 
   def run(self):
+    '''
+    run()
+    Extended method that runs movement task on thread start
+    '''
+    # center camera/sensor servos
     self.servo.setServoPwm('0', 90)
     self.servo.setServoPwm('1', 90)
     
-
-    while (not self.f.is_set() and not self.e.is_set()):
+    # loop while neither flag has been set
+    while (self.checkEndCondition()):
       self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED, MOTOR_SPEED)
-
-      self.servo.setServoPwm('0', 30)
-      time.sleep(0.4)
-      self.avoid(self.ultrasonic.get_distance())
-
-      self.servo.setServoPwm('0', 90)
-      time.sleep(0.4)
-      self.avoid(self.ultrasonic.get_distance())
+      angleList = [30, 90, 150, 90]
       
-      self.servo.setServoPwm('0', 150)
-      time.sleep(0.4)
-      self.avoid(self.ultrasonic.get_distance())
+      # swivel in 3 directions and for each take a reading
+      for angle in angleList:
+        self.servo.setServoPwm('0', angle)
+        time.sleep(0.4)
+        self.avoid(self.ultrasonic.get_distance())
 
-      self.servo.setServoPwm('0', 90)
-      time.sleep(0.4)
-      self.avoid(self.ultrasonic.get_distance())
+        # break out if end condition set, reduces delay in ending
+        if (self.checkEndCondition()):
+          break
 
+    # turn off the motors and reset servo
     self.motor.setMotorModel(0,0,0,0)
     self.servo.setServoPwm('0', 90)
 
   def avoid(self, distance: int):
+    '''
+    avoid()
+    Simple function that reverses and turns car when distance is less than a specified amount
+
+    distance: int
+    The distance (in cm) from the car to the obstacle
+    '''
     if (distance < COLLISION_DIST):
         self.motor.setMotorModel(-MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED)
         time.sleep(0.4)
 
         self.motor.setMotorModel(MOTOR_SPEED, MOTOR_SPEED, -MOTOR_SPEED, -MOTOR_SPEED)
         time.sleep(0.4)
+
+  def checkEndCondition(self):
+    '''
+    checkEndCondition()
+    Simple function that checks both of the flags that should stop the thread
+    '''
+    return not self.f.is_set() and not self.e.is_set()
     
