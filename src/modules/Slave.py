@@ -65,7 +65,7 @@ class Slave:
       t.join()
 
     # no message means we found the objective
-    if (mailbox.empty):
+    if (mailbox.empty()):
       self.collector.send_string(FOUND_MSG + ":" + str(self.carNumber))
       self.foundCarNum = self.carNumber
     else:

@@ -11,14 +11,20 @@ MOTOR_SPEED = 700
 COLLISION_DIST = 15
 
 def detectStopSign(vidCapture, stop_data):
+  '''
+  detectStopSign()
+  function that detects stop stopsign based on cascade file data
+  Returns whether or not it detects a stop sign in video capture
+  '''
   suc, img=vidCapture.read()
-
   img_gray=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
   found = stop_data.detectMultiScale(img_gray, minSize =(100, 100))
-  
   return len(found) != 0
 
 def baseSearchFunction(finished: Event, exit: Event, data):
+  '''
+  base
+  '''
 
   # set up video capture and stop sign data
   vidCapture = cv2.VideoCapture(0)
