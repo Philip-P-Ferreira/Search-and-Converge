@@ -44,26 +44,28 @@ def baseSearchFunction(finished: Event, exit: Event, data):
 
 def baseConvergeFunction(carNum: int):
   
-  # setup pins for buzzer
-  GPIO.setwarnings(False)
-  GPIO.setmode(GPIO.BCM)
-  GPIO.setup(17, GPIO.OUT)
+  # # setup pins for buzzer
+  # GPIO.setwarnings(False)
+  # GPIO.setmode(GPIO.BCM)
+  # GPIO.setup(17, GPIO.OUT)
 
-  # Higher number = faster beeps
-  period = (1/2)/carNum
+  # # Higher number = faster beeps
+  # period = (1/2)/carNum
 
-  # repeat beeping some number of times
-  for i in range(5):
-    # toggle button n times fast, followed by a longer pause
-    for i in range(carNum):
-      GPIO.output(17, True)
-      time.sleep(period)
-      GPIO.output(17, False)
-      time.sleep(period)
-    time.sleep(1)
+  # # repeat beeping some number of times
+  # for i in range(5):
+  #   # toggle button n times fast, followed by a longer pause
+  #   for i in range(carNum):
+  #     GPIO.output(17, True)
+  #     time.sleep(period)
+  #     GPIO.output(17, False)
+  #     time.sleep(period)
+  #   time.sleep(1)
 
-  # always make sure to stop it
-  GPIO.output(17, False)
+  # # always make sure to stop it
+  # GPIO.output(17, False)
+
+  print("Converging")
 class CollisionThread(Thread):
   '''
   CollisionThread:
