@@ -5,6 +5,7 @@ from modules.Common import debug
 from modules.Motor import Motor
 from modules.Ultrasonic import Ultrasonic
 from modules.servo import Servo
+import RPi.GPIO as GPIO
 
 MOTOR_SPEED = 700
 COLLISION_DIST = 15
@@ -41,8 +42,19 @@ def baseSearchFunction(finished: Event, exit: Event, data):
     vidCapture.release()
   
 
-def baseConvergeFunction():
-  return None
+def baseConvergeFunction(carNum: int):
+  GPIO.setwarnings(False)
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(17, GPIO.OUT)
+
+  for i in range(10):
+    for i in range(carNum):
+      GPIO.output(17, True)
+      time.sleep(0.5)
+      GPIO.output(17, False)
+      time.sleep(0.5)
+    time.sleep(1)
+
 
 class CollisionThread(Thread):
   def __init__(self, finished: Event, exit: Event):

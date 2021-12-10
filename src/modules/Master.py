@@ -3,7 +3,7 @@ from typing import Callable
 from modules.Common import *
 
 class Master:
-  def __init__(self, carNumber: int, searchFunc: MasterAction, convergeFunc: Callable[[], None]):
+  def __init__(self, carNumber: int, searchFunc: MasterAction, convergeFunc: Callable[[int], None]):
     '''
     Create a Master control object
 
