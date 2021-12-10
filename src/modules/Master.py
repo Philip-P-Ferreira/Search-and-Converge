@@ -77,4 +77,4 @@ class Master:
     converge()
     Simply runs the converge function
     '''
-    self.convergeFunc()
+    self.convergeFunc(self.foundCarNum)
