@@ -1,7 +1,13 @@
 from commonMain import baseConvergeFunction, baseSearchFunction
-from modules.Master import * 
+from modules.Master import *
+from modules.Ultrasonic import Ultrasonic 
 
 CASCADE_FILE = "assets/stop_data.xml"
+
+# idle until hand motion
+u = Ultrasonic()
+while (u.get_distance() > 5):
+  pass
 
 # toggle debug from here
 DEBUG_FLAG.set()
