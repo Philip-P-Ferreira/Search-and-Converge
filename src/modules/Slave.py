@@ -1,7 +1,6 @@
 import zmq
 from typing import Callable
 from modules.Common import *
-from time import sleep
 
 class Slave:
   def __init__(self, carNumber:int, ipAddr: str, searchFunc: SlaveAction, convergeFunc: Callable[[int], None]):
