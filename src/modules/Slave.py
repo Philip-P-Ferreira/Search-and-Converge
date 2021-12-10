@@ -41,7 +41,7 @@ class Slave:
     '''
 
     # receive data
-    data = self.distributor.recv_pyobj()
+    data = self.distributor.recv_string()
     debug("Received data from master and starting search")
 
     # we have to know *who* found the item
