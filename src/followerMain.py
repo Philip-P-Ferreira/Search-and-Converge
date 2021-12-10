@@ -4,7 +4,7 @@ import sys
 
 DEBUG_FLAG.set()
 
-carNum = int(sys.argv[0])
+carNum = int(sys.argv[1])
 
 followerController = Slave(carNum, "Philips-MacBook-Pro.local", baseSearchFunction, baseConvergeFunction)
 
