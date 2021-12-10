@@ -16,7 +16,7 @@ All cars (1 master and n followers) must be on the same WiFi network. For best r
 
 
 ## Staring the search
-Wave your haven in front of the master car's camera/sensor module.
+Wave your hand in front of the master car's camera/sensor module.
 
 ## Ending Search
 Search ends when one of the cars find the objective (currently just a stop sign). Then all cars will stop and beep according the number of the car that found the objective.
