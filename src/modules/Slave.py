@@ -66,7 +66,7 @@ class Slave:
 
     # no message means we found the objective
     if (mailbox.empty):
-      self.collector.send_string(FOUND_MSG + ":" + self.carNumber)
+      self.collector.send_string(FOUND_MSG + ":" + str(self.carNumber))
       self.foundCarNum = self.carNumber
     else:
       msg: str = mailbox.get()

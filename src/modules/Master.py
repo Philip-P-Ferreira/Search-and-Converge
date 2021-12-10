@@ -70,7 +70,7 @@ class Master:
       self.foundCarNum = int(arr[1])
 
     # redistribute out found message
-    self.distributor.send_string(FOUND_MSG + ":" + self.foundCarNum)
+    self.distributor.send_string(FOUND_MSG + ":" + str(self.foundCarNum))
 
   def converge(self):
     '''
