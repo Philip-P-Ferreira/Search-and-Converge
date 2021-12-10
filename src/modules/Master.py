@@ -36,7 +36,7 @@ class Master:
 
     # send data
     debug("Sending data to slave cars and starting search")
-    self.distributor.send_string(data)
+    self.distributor.send_string(data + "\0")
 
     # start search, run search func in another thread
     debug("Data sent, starting search")
