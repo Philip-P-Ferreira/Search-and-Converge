@@ -49,7 +49,7 @@ def baseConvergeFunction(carNum: int):
 
   period = (1/2)/carNum
 
-  for i in range(10):
+  for i in range(5):
     for i in range(carNum):
       GPIO.output(17, True)
       time.sleep(period)
