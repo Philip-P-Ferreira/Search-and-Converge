@@ -4,7 +4,7 @@ from modules.Common import *
 from time import sleep
 
 class Slave:
-  def __init__(self, ipAddr: str, searchFunc: SlaveAction, convergeFunc: Callable[[], None]):
+  def __init__(self, carNumber:int, ipAddr: str, searchFunc: SlaveAction, convergeFunc: Callable[[int], None]):
     '''
     Create a Slave control object
 
@@ -13,6 +13,7 @@ class Slave:
       function succeeds. The second event flag must be able to stop the function in a reasonable amount of time. The any object
       is the data necessary for the slaves to find the objective
     '''
+    self.carNumber = carNumber
     self.ipAddr = ipAddr
     self.searchFunc = searchFunc
     self.convergeFunc = convergeFunc
@@ -44,11 +45,11 @@ class Slave:
     debug("Received data from master and starting search")
 
     # we have to know *who* found the item
-    masterFinished = Event()
-    slaveFinished = Event()
+    finished = Event()
+    mailbox = Queue(1)
     threads = (
-      ActionThread(slaveFinished, self.searchFunc, data),
-      NetworkThread(masterFinished, self.distributor) # listen for found message from master
+      ActionThread(finished, self.searchFunc, data),
+      NetworkThread(mailbox, finished, self.distributor) # listen for found message from master
     )
 
     debug("Starting task threads")
@@ -56,25 +57,27 @@ class Slave:
       t.start()
 
     debug("Waiting at least 1 task completion...")
-    # block on either task finishing
-    while True:
-  
-      # check if either flag has been set
-      if (masterFinished.is_set() or slaveFinished.is_set()):
-        if slaveFinished.is_set(): self.collector.send_string(FOUND_MSG) # tell master if we found the objective
-        break
-      sleep(1)
+    finished.wait()
 
     debug("Joining task threads")
     # join task threads
     for t in threads:
       t.join()
 
-  def converge(self):
+    # no message means we found the objective
+    if (mailbox.empty):
+      self.collector.send_string(FOUND_MSG + ":" + self.carNumber)
+      self.foundCarNum = self.carNumber
+    else:
+      msg: str = mailbox.get()
+      arr = msg.split(":")
+      self.foundCarNum = int(arr[1])
+
+  def converge(self, foundCarNum: int):
     '''
     converge()
   
     Simply runs the converge function
     '''
-    self.convergeFunc()
+    self.convergeFunc(foundCarNum)
     

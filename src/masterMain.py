@@ -9,7 +9,7 @@ DEBUG_FLAG.set()
 def masterSearchFunction(finished: Event, exit: Event):
   baseSearchFunction(finished, exit, CASCADE_FILE)
 
-masterController = Master(masterSearchFunction, baseConvergeFunction)
+masterController = Master(1, masterSearchFunction, baseConvergeFunction)
 
 masterController.startSearch(CASCADE_FILE)
 masterController.converge()

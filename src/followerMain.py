@@ -1,9 +1,12 @@
 from commonMain import baseConvergeFunction, baseSearchFunction
 from modules.Slave import *
+import sys
 
 DEBUG_FLAG.set()
 
-followerController = Slave("Philips-MacBook-Pro.local", baseSearchFunction, baseConvergeFunction)
+carNum = int(sys.argv[0])
+
+followerController = Slave(carNum, "Philips-MacBook-Pro.local", baseSearchFunction, baseConvergeFunction)
 
 followerController.startSearch()
 followerController.converge()

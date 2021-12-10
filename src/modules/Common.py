@@ -1,6 +1,7 @@
 from threading import Event, Thread
 from typing import Callable, Union
 import zmq
+from queue import Queue
 
 # Constants used across multiple files
 DISTRIBUTOR_PORT = 5555
@@ -21,7 +22,7 @@ exit: Event
 The action MUST be stoppable via another thread setting this flag
 '''
 
-SlaveAction = Callable[[Event, Event, any], None]
+SlaveAction = Callable[[Event, Event, str], None]
 '''
 SlaveAction: (finished: Event, exit: Event, data: any) -> None
 Custom function type to represent a local task being run on a slave car.
@@ -82,7 +83,7 @@ class NetworkThread(ThreadedTask):
   Extended from ThreadedTask to provide a task that reads a message via a (zmq) socket
   '''
 
-  def __init__(self, finished: Event, socket: zmq.Socket):
+  def __init__(self, mailbox: Queue, finished: Event, socket: zmq.Socket):
     '''
     Constructor()
 
@@ -94,6 +95,7 @@ class NetworkThread(ThreadedTask):
     '''
     super().__init__(finished)
     self.socket = socket
+    self.mailbox = mailbox
 
   def run(self):
     '''
@@ -109,6 +111,7 @@ class NetworkThread(ThreadedTask):
         msg = self.socket.recv_string()
         debug("Message received: %s" % msg)
         self.finished.set()
+        self.mailbox.put(msg, True, 5)
       else:
         debug("No message to receive. Trying again...")
 
