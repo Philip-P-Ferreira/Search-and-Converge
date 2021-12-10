@@ -26,7 +26,7 @@ class Master:
     #debug message
     debug("Bound to ports %d and %d" % (DISTRIBUTOR_PORT, COLLECTOR_PORT))
 
-  def startSearch(self, data: str):
+  def startSearch(self, data):
     '''
     Send image data to slave cars and start search
 
