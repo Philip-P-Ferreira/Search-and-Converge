@@ -110,8 +110,8 @@ class NetworkThread(ThreadedTask):
       if (self.socket.poll(1000) == zmq.POLLIN): # if message to read, then read it
         msg = self.socket.recv_string()
         debug("Message received: %s" % msg)
+        self.mailbox.put(msg)
         self.finished.set()
-        self.mailbox.put(msg, True, 5)
       else:
         debug("No message to receive. Trying again...")
 

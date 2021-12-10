@@ -62,12 +62,12 @@ class Master:
       t.join()
 
     # no message means we found the objective
-    if (mailbox.empty):
+    if (mailbox.empty()):
       self.foundCarNum = self.carNumber
     else:
       msg: str = mailbox.get()
 
-      print("mailbox: %s" % msg)
+      debug("mailbox: %s" % msg)
 
       arr = msg.split(":")
       self.foundCarNum = int(arr[1])
