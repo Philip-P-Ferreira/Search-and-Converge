@@ -2,7 +2,7 @@ from commonMain import baseConvergeFunction, baseSearchFunction
 from modules.Master import *
 from modules.Ultrasonic import Ultrasonic 
 
-CASCADE_FILE = "assets/stop_data.xml\n"
+CASCADE_FILE = "assets/stop_data.xml"
 
 # idle until hand motion
 u = Ultrasonic()
