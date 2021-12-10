@@ -67,7 +67,7 @@ class Master:
     else:
       msg: str = mailbox.get()
 
-      debug("mailbox: %s" % msg)
+      print("mailbox: %s" % msg)
 
       arr = msg.split(":")
       self.foundCarNum = int(arr[1])
