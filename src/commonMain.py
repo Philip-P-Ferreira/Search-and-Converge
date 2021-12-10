@@ -47,13 +47,17 @@ def baseConvergeFunction(carNum: int):
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(17, GPIO.OUT)
 
+  period = (1/2)/carNum
+
   for i in range(10):
     for i in range(carNum):
       GPIO.output(17, True)
-      time.sleep(0.5)
+      time.sleep(period)
       GPIO.output(17, False)
-      time.sleep(0.5)
+      time.sleep(period)
     time.sleep(1)
+
+  GPIO.output(17, False)
 
 
 class CollisionThread(Thread):
