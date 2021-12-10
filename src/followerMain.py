@@ -6,7 +6,7 @@ DEBUG_FLAG.set()
 
 carNum = int(sys.argv[1])
 
-followerController = Slave(carNum, "Philips-MacBook-Pro.local", baseSearchFunction, baseConvergeFunction)
+followerController = Slave(carNum, "phil-pi.local", baseSearchFunction, baseConvergeFunction)
 
 followerController.startSearch()
 followerController.converge()
