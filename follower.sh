@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo python src/followerMain.py
+sudo python src/followerMain.py $1
